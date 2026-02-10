@@ -332,3 +332,246 @@ video {
   width: 100%;
   max-width: 100vw;
 }
+
+/* ═══════════════════════════════════════════════════
+   AWWWARDS-LEVEL CARD SYSTEM
+   ═══════════════════════════════════════════════════ */
+
+/* ── Scroll-triggered Card Reveal ── */
+.card-reveal {
+  opacity: 0;
+  transform: translateY(40px) scale(0.96);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Stagger delays for cards */
+.card-stagger-0 {
+  transition-delay: 0ms;
+}
+
+.card-stagger-1 {
+  transition-delay: 80ms;
+}
+
+.card-stagger-2 {
+  transition-delay: 160ms;
+}
+
+.card-stagger-3 {
+  transition-delay: 240ms;
+}
+
+.card-stagger-4 {
+  transition-delay: 320ms;
+}
+
+.card-stagger-5 {
+  transition-delay: 400ms;
+}
+
+/* ── 3D Perspective Container ── */
+.perspective-container {
+  perspective: 1200px;
+  perspective-origin: center;
+}
+
+/* ── Premium Card Base ── */
+.premium-card {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Hover-only for desktop */
+@media (hover: hover) and (pointer: fine) {
+  .premium-card:hover {
+    transform: translateY(-8px) rotateX(2deg) rotateY(-1deg) scale(1.02);
+    box-shadow:
+      0 20px 40px -12px rgba(0, 0, 0, 0.15),
+      0 8px 16px -8px rgba(0, 0, 0, 0.1),
+      0 0 0 1px rgba(45, 212, 191, 0.15);
+  }
+}
+
+/* Active press for mobile */
+@media (hover: none) {
+  .premium-card:active {
+    transform: scale(0.97);
+    transition-duration: 0.15s;
+  }
+}
+
+/* ── Card Shine Effect (hover-only) ── */
+.card-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-shine::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.08),
+      transparent);
+  z-index: 10;
+  pointer-events: none;
+  transition: left 0s ease;
+}
+
+@media (hover: hover) {
+  .card-shine:hover::before {
+    left: 150%;
+    transition: left 0.8s ease;
+  }
+}
+
+/* ── Premium Icon Container ── */
+.icon-float {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (hover: hover) {
+  .premium-card:hover .icon-float {
+    transform: translateY(-4px) scale(1.08);
+    box-shadow: 0 8px 24px -4px rgba(13, 148, 136, 0.35);
+  }
+}
+
+/* ── Card Glow Ring ── */
+.card-glow {
+  position: relative;
+}
+
+.card-glow::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, transparent 40%, rgba(45, 212, 191, 0.3) 50%, transparent 60%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .card-glow:hover::after {
+    opacity: 1;
+  }
+}
+
+/* ── Horizontal Scroll Progress Bar ── */
+.scroll-progress-track {
+  height: 3px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+.scroll-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #14b8a6, #06b6d4);
+  border-radius: 999px;
+  transition: width 0.15s ease-out;
+  min-width: 20%;
+}
+
+/* ── Scroll Fade Edges ── */
+.scroll-fade-edges {
+  position: relative;
+}
+
+.scroll-fade-edges::before,
+.scroll-fade-edges::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 20px;
+  /* above the progress bar */
+  width: 32px;
+  z-index: 5;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.scroll-fade-edges::before {
+  left: 0;
+  background: linear-gradient(to right, var(--fade-bg, #f9fafb), transparent);
+}
+
+.scroll-fade-edges::after {
+  right: 0;
+  background: linear-gradient(to left, var(--fade-bg, #f9fafb), transparent);
+}
+
+.scroll-fade-edges.at-start::before {
+  opacity: 0;
+}
+
+.scroll-fade-edges.at-end::after {
+  opacity: 0;
+}
+
+/* ── Card Number Badge ── */
+.card-number {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, #14b8a6, #0d9488);
+  color: white;
+  font-size: 11px;
+  font-weight: 800;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px -2px rgba(13, 148, 136, 0.4);
+  z-index: 5;
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.card-reveal.revealed .card-number {
+  opacity: 1;
+  transform: scale(1);
+  transition-delay: 0.3s;
+}
+
+/* ── Premium Shadow Levels ── */
+.shadow-premium {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 4px 12px rgba(0, 0, 0, 0.06),
+    0 0 0 1px rgba(0, 0, 0, 0.03);
+}
+
+.shadow-premium-lg {
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.04),
+    0 12px 32px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(0, 0, 0, 0.03);
+}

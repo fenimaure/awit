@@ -142,7 +142,7 @@ function App() {
       {isLoading && <LoadingScreen isExiting={isExiting} />}
       {showLogo && <LogoDisplay onComplete={() => setShowLogo(false)} />}
       <MobileBottomNav isVisible={true} onNavigate={scrollToSection} activeSection={activeSection} />
-      <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-lg py-2 sm:py-3' : 'bg-white/95 backdrop-blur-sm shadow-sm py-3 sm:py-4'
+      <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-lg py-3 sm:py-4' : 'bg-white/95 backdrop-blur-sm shadow-sm py-4 sm:py-5'
         }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
@@ -154,7 +154,7 @@ function App() {
               <img
                 src={getStoredImageUrl('logo', '/logo.jpg')}
                 alt="Quick Home Prefab"
-                className={`transition-all duration-300 ${scrolled ? 'h-10 sm:h-12' : 'h-12 sm:h-14'}`}
+                className={`transition-all duration-300 ${scrolled ? 'h-12 sm:h-14' : 'h-14 sm:h-16'}`}
               />
             </button>
 
@@ -163,7 +163,7 @@ function App() {
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all ${activeSection === item.id
+                  className={`px-4 py-2.5 rounded-lg font-medium text-[15px] transition-all ${activeSection === item.id
                     ? 'text-teal-600 bg-teal-50'
                     : 'text-gray-700 hover:text-teal-600 hover:bg-gray-50'
                     }`}
@@ -179,11 +179,11 @@ function App() {
                 className="text-gray-700 hover:text-teal-600 transition-colors p-2"
                 aria-label="Call us"
               >
-                <Phone size={20} />
+                <Phone size={22} />
               </a>
               <button
                 onClick={() => scrollToSection('contact')}
-                className="bg-gradient-to-r from-teal-600 to-teal-700 text-white px-6 py-2.5 rounded-lg active:scale-[0.97] transition-transform duration-150 font-medium shadow-md touch-manipulation"
+                className="bg-gradient-to-r from-teal-600 to-teal-700 text-white px-7 py-3 rounded-lg active:scale-[0.97] transition-transform duration-150 font-semibold text-[15px] shadow-md touch-manipulation"
               >
                 Get Started
               </button>
@@ -194,7 +194,7 @@ function App() {
               className="lg:hidden text-gray-700 hover:text-teal-600 active:text-teal-700 transition-colors p-2 touch-manipulation"
               aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
             >
-              {mobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
+              {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
           </div>
         </div>
@@ -387,15 +387,15 @@ function App() {
             <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">Everything you need, nothing you don't</p>
           </div>
 
-          <HorizontalCardScroller>
+          <HorizontalCardScroller fadeBg="#f9fafb">
             {[
               { icon: Clock, title: 'Fast Construction', desc: '3-4 months from concept to completion. Build faster than traditional methods without sacrificing quality.' },
               { icon: DollarSign, title: 'Affordable Pricing', desc: 'Competitive prices that don\'t compromise on quality. More house for your budget means smart investment.' },
               { icon: Hammer, title: 'Customizable Designs', desc: 'Personalize every detail. From layout to finishes, create the exact home you\'ve always imagined.' },
               { icon: MapPin, title: 'Local Expertise', desc: 'Deep-rooted in Philippine communities. We understand regional needs, climate, and preferences perfectly.' },
             ].map((feature, i) => (
-              <div key={i} className="group bg-white p-5 sm:p-8 rounded-2xl shadow-md active:shadow-lg transition-shadow duration-300 border border-gray-100 mobile-card snap-center lg:min-w-0">
-                <div className="bg-gradient-to-br from-teal-100 to-teal-50 w-14 h-14 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center mb-4 shadow-sm">
+              <div key={i} className="group bg-white p-5 sm:p-8 rounded-2xl shadow-premium border border-gray-100/80 mobile-card snap-center lg:min-w-0">
+                <div className="bg-gradient-to-br from-teal-100 to-teal-50 w-14 h-14 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center mb-5 shadow-sm icon-float">
                   <feature.icon className="text-teal-600" size={28} />
                 </div>
                 <h3 className="text-lg sm:text-xl font-bold text-blue-900 mb-2">{feature.title}</h3>
@@ -696,7 +696,7 @@ function App() {
             <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">Complete solutions for your prefab home journey</p>
           </div>
 
-          <HorizontalCardScroller>
+          <HorizontalCardScroller fadeBg="#f9fafb">
             {[
               { icon: Hammer, title: 'Custom Design', desc: 'Personalized floor plans tailored to your specific needs and preferences.' },
               { icon: Lightbulb, title: 'Smart Home Integration', desc: 'Built-in automation and energy management systems for modern living.' },
@@ -705,10 +705,12 @@ function App() {
               { icon: Shield, title: 'Extended Warranty', desc: '10-year comprehensive warranty covering structural and mechanical components.' },
               { icon: DollarSign, title: 'Financing Options', desc: 'Flexible payment plans and partnerships with leading financial institutions.' },
             ].map((service, i) => (
-              <div key={i} className="bg-white p-5 sm:p-8 rounded-xl border border-teal-100 transition-shadow duration-300 shadow-sm active:shadow-md mobile-card snap-center lg:min-w-0">
-                <service.icon className="text-teal-600 mb-4" size={28} />
+              <div key={i} className="bg-white p-5 sm:p-8 rounded-xl border border-teal-100/80 shadow-premium mobile-card snap-center lg:min-w-0">
+                <div className="bg-gradient-to-br from-teal-50 to-cyan-50 w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex items-center justify-center mb-5 icon-float">
+                  <service.icon className="text-teal-600" size={24} />
+                </div>
                 <h3 className="text-lg sm:text-xl font-bold text-blue-900 mb-2">{service.title}</h3>
-                <p className="text-gray-600 text-sm sm:text-base">{service.desc}</p>
+                <p className="text-gray-600 text-sm sm:text-base leading-relaxed">{service.desc}</p>
               </div>
             ))}
           </HorizontalCardScroller>
@@ -893,7 +895,7 @@ function App() {
             </div>
           </div>
 
-          <HorizontalCardScroller showArrows={false}>
+          <HorizontalCardScroller showArrows={false} fadeBg="#f9fafb">
             {[
               { name: 'Coastal Villa', type: 'Residential', size: '180', location: 'Batangas', bedrooms: '4', imageKey: 'project-coastal-villa' },
               { name: 'Eco-Friendly Home', type: 'Residential', size: '95', location: 'Tagaytay', bedrooms: '2', imageKey: 'project-eco-home' },
@@ -902,7 +904,7 @@ function App() {
               { name: 'Student Dormitory', type: 'Modular', size: '500', location: 'Baguio', bedrooms: '20', imageKey: 'project-student-dorm' },
               { name: 'Retail Space', type: 'Commercial', size: '200', location: 'Makati', bedrooms: null, imageKey: 'project-retail-space' },
             ].map((project, i) => (
-              <div key={i} className="group overflow-hidden rounded-xl shadow-md active:shadow-lg transition-shadow duration-300 bg-white border border-gray-200 mobile-card snap-center lg:min-w-0">
+              <div key={i} className="group overflow-hidden rounded-xl shadow-premium bg-white border border-gray-200/80 mobile-card snap-center lg:min-w-0">
                 <div className="relative h-44 sm:h-56 bg-gradient-to-br from-blue-800 via-teal-600 to-blue-900 overflow-hidden">
                   {hasStoredImage(project.imageKey) ? (
                     <img
@@ -981,7 +983,7 @@ function App() {
             <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">Real reviews from satisfied homeowners</p>
           </div>
 
-          <HorizontalCardScroller showArrows={false}>
+          <HorizontalCardScroller showArrows={false} fadeBg="#ffffff">
             {[
               {
                 name: "Sarah Johnson",
@@ -1002,7 +1004,7 @@ function App() {
                 rating: 5
               }
             ].map((testimonial, i) => (
-              <div key={i} className="bg-gradient-to-br from-gray-50 to-blue-50 p-5 sm:p-8 rounded-xl shadow-sm hover:shadow-xl transition-all border border-gray-100 mobile-card snap-center lg:min-w-0">
+              <div key={i} className="bg-gradient-to-br from-gray-50 to-blue-50/80 p-5 sm:p-8 rounded-xl shadow-premium border border-gray-100/60 mobile-card snap-center lg:min-w-0">
                 <div className="flex gap-1 mb-4">
                   {[...Array(testimonial.rating)].map((_, j) => (
                     <Star key={j} className="text-yellow-400 fill-yellow-400" size={20} />
