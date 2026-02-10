@@ -194,7 +194,7 @@ export default function Gallery3D() {
       onTouchEnd={handleTouchEnd}
     >
       {/* Cards Container */}
-      <div className="relative w-full h-[420px] sm:h-[460px] md:h-[500px] flex items-center justify-center">
+      <div className="relative w-full h-[350px] xs:h-[400px] sm:h-[460px] md:h-[500px] flex items-center justify-center">
         {galleryItems.map((item, index) => {
           const Icon = item.icon;
           const isCenter = index === activeIndex;
@@ -210,10 +210,10 @@ export default function Gallery3D() {
               tabIndex={!isCenter ? 0 : undefined}
               aria-label={!isCenter ? `View ${item.title}` : undefined}
             >
-              <div className={`w-[78vw] max-w-[300px] sm:w-[320px] lg:w-[380px] bg-white rounded-2xl overflow-hidden gpu-accelerated ${isCenter ? 'shadow-2xl ring-1 ring-black/5' : 'shadow-lg'
+              <div className={`w-[75vw] max-w-[280px] sm:w-[300px] sm:max-w-[300px] lg:w-[380px] lg:max-w-[380px] bg-white rounded-2xl overflow-hidden gpu-accelerated ${isCenter ? 'shadow-2xl ring-1 ring-black/5' : 'shadow-lg'
                 }`}>
                 {/* Image area */}
-                <div className="relative h-44 sm:h-52 bg-gradient-to-br from-blue-900 via-blue-700 to-teal-600 overflow-hidden">
+                <div className="relative h-36 sm:h-44 md:h-52 bg-gradient-to-br from-blue-900 via-blue-700 to-teal-600 overflow-hidden">
                   {hasImage ? (
                     <img
                       src={getStoredImageUrl(item.imageKey, '')}
@@ -288,8 +288,8 @@ export default function Gallery3D() {
               startAutoPlay();
             }}
             className={`transition-all duration-400 rounded-full touch-manipulation ${index === activeIndex
-                ? 'bg-gradient-to-r from-teal-500 to-teal-600 w-7 h-2.5 shadow-md'
-                : 'bg-gray-300 hover:bg-gray-400 w-2.5 h-2.5'
+              ? 'bg-gradient-to-r from-teal-500 to-teal-600 w-7 h-2.5 shadow-md'
+              : 'bg-gray-300 hover:bg-gray-400 w-2.5 h-2.5'
               }`}
             aria-label={`Go to slide ${index + 1}`}
             aria-current={index === activeIndex ? 'true' : undefined}

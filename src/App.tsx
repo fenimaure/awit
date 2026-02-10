@@ -138,7 +138,7 @@ function App() {
   ];
 
   return (
-    <div className="min-h-screen bg-white pb-20 lg:pb-0">
+    <div className="min-h-screen bg-white main-content lg:!pb-0">
       {isLoading && <LoadingScreen isExiting={isExiting} />}
       {showLogo && <LogoDisplay onComplete={() => setShowLogo(false)} />}
       <MobileBottomNav isVisible={true} onNavigate={scrollToSection} activeSection={activeSection} />
@@ -252,7 +252,7 @@ function App() {
         </div>
       </div>
 
-      <section id="home" className="relative h-[100svh] min-h-[500px] flex items-end justify-center overflow-hidden bg-slate-900 pb-20 sm:pb-24">
+      <section id="home" className="relative hero-fullscreen flex items-end justify-center overflow-hidden bg-slate-900">
         {/* Background Media */}
         <div className="absolute inset-0 z-0">
           {heroVideoUrl && !videoError ? (
@@ -262,7 +262,7 @@ function App() {
               muted
               playsInline
               poster="/hero.png"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover img-cover"
               key={heroVideoUrl}
               onError={() => setVideoError(true)}
               preload="metadata"
@@ -287,7 +287,7 @@ function App() {
         </div>
 
         {/* Minimal Bottom-Anchored Content */}
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 text-center sm:text-left mb-safe">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-8 text-center sm:text-left pb-24 sm:pb-28 mb-safe">
           <div className="max-w-xl mx-auto sm:mx-0 animate-fade-in-up">
             {/* Pill Badge */}
             <div className="inline-flex items-center gap-1.5 px-3 py-1 mb-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-teal-200 text-xs font-medium tracking-wide">
@@ -296,7 +296,7 @@ function App() {
             </div>
 
             {/* Punchy Headline */}
-            <h1 className="text-4xl sm:text-6xl font-bold text-white mb-4 tracking-tight leading-[1.1]">
+            <h1 className="hero-headline font-bold text-white mb-4">
               Building Smarter, <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-200 to-cyan-200">
                 Living Better.
@@ -304,14 +304,14 @@ function App() {
             </h1>
 
             {/* Micro-copy features */}
-            <p className="text-teal-100/90 text-sm sm:text-lg mb-8 font-medium tracking-wide mx-auto sm:mx-0">
+            <p className="text-teal-100/90 hero-subtext mb-6 sm:mb-8 font-medium tracking-wide mx-auto sm:mx-0">
               Prefab Homes • Fast Delivery • Durable • Affordable
             </p>
 
             {/* Single Primary Action */}
             <button
               onClick={() => scrollToSection('projects')}
-              className="w-full sm:w-auto bg-white text-slate-900 px-8 py-4 rounded-xl font-bold text-lg shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)] active:scale-[0.98] transition-all duration-200 touch-manipulation touch-target flex items-center justify-center gap-2 group"
+              className="w-full sm:w-auto bg-white text-slate-900 px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl font-bold text-base sm:text-lg shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)] active:scale-[0.98] transition-all duration-200 touch-manipulation touch-target flex items-center justify-center gap-2 group"
             >
               Explore Our Homes
               <ChevronRight className="group-hover:translate-x-1 transition-transform" size={20} />
@@ -321,11 +321,11 @@ function App() {
       </section>
 
 
-      <section id="about" className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-white">
+      <section id="about" className="py-12 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
             <div className="relative">
-              <div className="aspect-square rounded-2xl shadow-2xl relative overflow-hidden">
+              <div className="aspect-[4/3] sm:aspect-square rounded-2xl shadow-2xl relative overflow-hidden">
                 <img
                   src={getStoredImageUrl('prefab-about', '/images/prefab-about.svg')}
                   alt="Quick Home Prefab Building"
@@ -380,7 +380,7 @@ function App() {
         </div>
       </section>
 
-      <section id="features" className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-gray-50">
+      <section id="features" className="py-12 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8 sm:mb-12">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-blue-900 mb-4">Key Benefits of Our Homes</h2>
@@ -394,7 +394,7 @@ function App() {
               { icon: Hammer, title: 'Customizable Designs', desc: 'Personalize every detail. From layout to finishes, create the exact home you\'ve always imagined.' },
               { icon: MapPin, title: 'Local Expertise', desc: 'Deep-rooted in Philippine communities. We understand regional needs, climate, and preferences perfectly.' },
             ].map((feature, i) => (
-              <div key={i} className="group bg-white p-6 sm:p-8 rounded-2xl shadow-md active:shadow-lg transition-shadow duration-300 border border-gray-100 min-w-[260px] snap-center lg:min-w-0">
+              <div key={i} className="group bg-white p-5 sm:p-8 rounded-2xl shadow-md active:shadow-lg transition-shadow duration-300 border border-gray-100 mobile-card snap-center lg:min-w-0">
                 <div className="bg-gradient-to-br from-teal-100 to-teal-50 w-14 h-14 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center mb-4 shadow-sm">
                   <feature.icon className="text-teal-600" size={28} />
                 </div>
@@ -406,16 +406,16 @@ function App() {
         </div>
       </section>
 
-      <section id="prefab-types" className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-white">
+      <section id="prefab-types" className="py-12 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 sm:mb-16">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-blue-900 mb-4">Prefab Types We Offer</h2>
             <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">Versatile solutions for every need</p>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             <div className="group bg-gradient-to-br from-gray-50 to-white border-2 border-gray-200 rounded-2xl overflow-hidden hover:border-teal-300 hover:shadow-2xl transition-all duration-300">
-              <div className="relative h-72 overflow-hidden bg-gray-200">
+              <div className="relative h-48 sm:h-72 overflow-hidden bg-gray-200">
                 <img
                   src={getStoredImageUrl('prefab-residential', '/images/prefab-residential.svg')}
                   alt="Houses"
@@ -427,7 +427,7 @@ function App() {
                   RESIDENTIAL
                 </div>
               </div>
-              <div className="p-8">
+              <div className="p-5 sm:p-8">
                 <h3 className="text-2xl font-bold text-blue-900 mb-4">Houses</h3>
                 <p className="text-gray-600 mb-6 leading-relaxed">
                   Beautiful, energy-efficient homes designed for modern living. Perfect for families looking for quality housing with quick delivery.
@@ -461,7 +461,7 @@ function App() {
             </div>
 
             <div className="group bg-gradient-to-br from-gray-50 to-white border-2 border-gray-200 rounded-2xl overflow-hidden hover:border-teal-300 hover:shadow-2xl transition-all duration-300">
-              <div className="relative h-72 overflow-hidden bg-gray-200">
+              <div className="relative h-48 sm:h-72 overflow-hidden bg-gray-200">
                 <img
                   src={getStoredImageUrl('prefab-commercial', '/images/prefab-commercial.svg')}
                   alt="Offices & Commercial Spaces"
@@ -473,7 +473,7 @@ function App() {
                   COMMERCIAL
                 </div>
               </div>
-              <div className="p-8">
+              <div className="p-5 sm:p-8">
                 <h3 className="text-2xl font-bold text-blue-900 mb-4">Offices & Commercial Spaces</h3>
                 <p className="text-gray-600 mb-6 leading-relaxed">
                   Professional workspaces built to spec. Ideal for startups, branch offices, and growing businesses needing flexible solutions.
@@ -507,7 +507,7 @@ function App() {
             </div>
 
             <div className="group bg-gradient-to-br from-gray-50 to-white border-2 border-gray-200 rounded-2xl overflow-hidden hover:border-teal-300 hover:shadow-2xl transition-all duration-300">
-              <div className="relative h-72 overflow-hidden bg-gray-200">
+              <div className="relative h-48 sm:h-72 overflow-hidden bg-gray-200">
                 <img
                   src={getStoredImageUrl('prefab-modular', '/images/prefab-modular.svg')}
                   alt="Modular Units"
@@ -519,7 +519,7 @@ function App() {
                   MODULAR
                 </div>
               </div>
-              <div className="p-8">
+              <div className="p-5 sm:p-8">
                 <h3 className="text-2xl font-bold text-blue-900 mb-4">Modular Units</h3>
                 <p className="text-gray-600 mb-6 leading-relaxed">
                   Expandable and stackable units perfect for temporary housing, dormitories, classrooms, or multi-purpose facilities.
@@ -555,9 +555,9 @@ function App() {
         </div>
       </section>
 
-      <section id="benefits" className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-gray-50">
+      <section id="benefits" className="py-12 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
             <div className="order-2 lg:order-1">
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-blue-900 mb-6">
                 The Future of Home Building
@@ -588,7 +588,7 @@ function App() {
             </div>
 
             <div className="order-1 lg:order-2 relative">
-              <div className="aspect-square bg-gradient-to-br from-blue-900 to-teal-600 rounded-2xl shadow-2xl relative overflow-hidden">
+              <div className="aspect-[4/3] sm:aspect-square bg-gradient-to-br from-blue-900 to-teal-600 rounded-2xl shadow-2xl relative overflow-hidden">
                 {hasStoredImage('benefits-image') ? (
                   <img
                     src={getStoredImageUrl('benefits-image', '')}
@@ -611,7 +611,7 @@ function App() {
         </div>
       </section>
 
-      <section id="trust" className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-white">
+      <section id="trust" className="py-12 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 sm:mb-16">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-blue-900 mb-4">Why Our Clients Trust Us</h2>
@@ -668,7 +668,7 @@ function App() {
             ))}
           </div>
 
-          <div className="mt-12 bg-gradient-to-r from-blue-900 to-teal-600 rounded-2xl p-8 sm:p-12 text-white">
+          <div className="mt-8 sm:mt-12 bg-gradient-to-r from-blue-900 to-teal-600 rounded-2xl p-6 sm:p-12 text-white">
             <h3 className="text-2xl sm:text-3xl font-bold mb-4">Philippine Building Code Compliant</h3>
             <p className="text-lg text-blue-100 mb-6">All our homes meet and exceed the Philippines' Building Code requirements. We're licensed and registered with the Housing and Land Use Regulatory Board (HLURB) and comply with all regional construction standards.</p>
             <div className="grid sm:grid-cols-3 gap-4">
@@ -689,7 +689,7 @@ function App() {
         </div>
       </section>
 
-      <section id="services" className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-gray-50">
+      <section id="services" className="py-12 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8 sm:mb-12">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-blue-900 mb-4">Our Services</h2>
@@ -705,7 +705,7 @@ function App() {
               { icon: Shield, title: 'Extended Warranty', desc: '10-year comprehensive warranty covering structural and mechanical components.' },
               { icon: DollarSign, title: 'Financing Options', desc: 'Flexible payment plans and partnerships with leading financial institutions.' },
             ].map((service, i) => (
-              <div key={i} className="bg-white p-6 sm:p-8 rounded-xl border border-teal-100 transition-shadow duration-300 shadow-sm active:shadow-md min-w-[260px] snap-center lg:min-w-0">
+              <div key={i} className="bg-white p-5 sm:p-8 rounded-xl border border-teal-100 transition-shadow duration-300 shadow-sm active:shadow-md mobile-card snap-center lg:min-w-0">
                 <service.icon className="text-teal-600 mb-4" size={28} />
                 <h3 className="text-lg sm:text-xl font-bold text-blue-900 mb-2">{service.title}</h3>
                 <p className="text-gray-600 text-sm sm:text-base">{service.desc}</p>
@@ -715,14 +715,14 @@ function App() {
         </div>
       </section>
 
-      <section id="process" className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-white">
+      <section id="process" className="py-12 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 sm:mb-16">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-blue-900 mb-4">How It Works</h2>
             <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">Simple, transparent process from start to finish</p>
           </div>
 
-          <div className="grid lg:grid-cols-5 gap-6 lg:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-4">
             {[
               {
                 icon: Lightbulb,
@@ -758,14 +758,14 @@ function App() {
                     </div>
                   </div>
                 )}
-                <div className="relative z-10 bg-white p-6 rounded-xl border-2 border-gray-200 hover:border-teal-400 hover:shadow-xl transition-all duration-300 h-full">
-                  <div className="bg-gradient-to-br from-teal-500 to-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                    <step.icon className="text-white" size={32} />
+                <div className="relative z-10 bg-white p-4 sm:p-6 rounded-xl border-2 border-gray-200 hover:border-teal-400 hover:shadow-xl transition-all duration-300 h-full">
+                  <div className="bg-gradient-to-br from-teal-500 to-blue-600 w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg">
+                    <step.icon className="text-white" size={24} />
                   </div>
                   <div className="text-center">
-                    <div className="text-sm font-bold text-teal-600 mb-2">STEP {i + 1}</div>
-                    <h3 className="text-lg font-bold text-blue-900 mb-3">{step.title}</h3>
-                    <p className="text-gray-600 text-sm leading-relaxed">{step.desc}</p>
+                    <div className="text-xs sm:text-sm font-bold text-teal-600 mb-1 sm:mb-2">STEP {i + 1}</div>
+                    <h3 className="text-sm sm:text-lg font-bold text-blue-900 mb-2 sm:mb-3">{step.title}</h3>
+                    <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">{step.desc}</p>
                   </div>
                 </div>
               </div>
@@ -784,7 +784,7 @@ function App() {
         </div>
       </section>
 
-      <section id="projects" className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
+      <section id="projects" className="py-12 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 sm:mb-16">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-blue-900 mb-4">3D Portfolio Gallery</h2>
@@ -800,9 +800,9 @@ function App() {
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8 mb-12">
+          <div className="grid sm:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">
             <div className="group relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500">
-              <div className="relative h-96 bg-gradient-to-br from-blue-900 via-blue-700 to-teal-600 overflow-hidden">
+              <div className="relative h-64 sm:h-80 lg:h-96 bg-gradient-to-br from-blue-900 via-blue-700 to-teal-600 overflow-hidden">
                 {hasStoredImage('featured-project-1') ? (
                   <img
                     src={getStoredImageUrl('featured-project-1', '')}
@@ -819,19 +819,19 @@ function App() {
                   </>
                 )}
                 <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-500"></div>
-                <div className="absolute top-6 left-6 space-y-2">
-                  <div className="bg-teal-600 text-white px-4 py-2 rounded-full text-sm font-bold inline-block">
+                <div className="absolute top-3 left-3 sm:top-6 sm:left-6 space-y-2">
+                  <div className="bg-teal-600 text-white px-3 py-1 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold inline-block">
                     RESIDENTIAL
                   </div>
-                  <div className="bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold inline-block ml-2">
+                  <div className="bg-white/20 backdrop-blur-sm text-white px-3 py-1 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-semibold inline-block ml-2">
                     Featured Project
                   </div>
                 </div>
               </div>
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-8 text-white">
-                <h3 className="text-2xl font-bold mb-2">Modern Family Home</h3>
-                <p className="text-blue-100 mb-4">3-bedroom contemporary design with open floor plan and eco-friendly features</p>
-                <div className="grid grid-cols-3 gap-4 text-sm">
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 sm:p-8 text-white">
+                <h3 className="text-lg sm:text-2xl font-bold mb-1 sm:mb-2">Modern Family Home</h3>
+                <p className="text-blue-100 mb-2 sm:mb-4 text-xs sm:text-base">3-bedroom contemporary design with open floor plan and eco-friendly features</p>
+                <div className="grid grid-cols-3 gap-2 sm:gap-4 text-xs sm:text-sm">
                   <div>
                     <div className="text-blue-200">Size</div>
                     <div className="font-semibold">120 sqm</div>
@@ -849,7 +849,7 @@ function App() {
             </div>
 
             <div className="group relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500">
-              <div className="relative h-96 bg-gradient-to-br from-teal-700 via-teal-600 to-blue-700 overflow-hidden">
+              <div className="relative h-64 sm:h-80 lg:h-96 bg-gradient-to-br from-teal-700 via-teal-600 to-blue-700 overflow-hidden">
                 {hasStoredImage('featured-project-2') ? (
                   <img
                     src={getStoredImageUrl('featured-project-2', '')}
@@ -866,16 +866,16 @@ function App() {
                   </>
                 )}
                 <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-500"></div>
-                <div className="absolute top-6 left-6">
-                  <div className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-bold inline-block">
+                <div className="absolute top-3 left-3 sm:top-6 sm:left-6">
+                  <div className="bg-blue-600 text-white px-3 py-1 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold inline-block">
                     COMMERCIAL
                   </div>
                 </div>
               </div>
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-8 text-white">
-                <h3 className="text-2xl font-bold mb-2">Tech Startup Office</h3>
-                <p className="text-blue-100 mb-4">Modern workspace with flexible layouts and smart building systems</p>
-                <div className="grid grid-cols-3 gap-4 text-sm">
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 sm:p-8 text-white">
+                <h3 className="text-lg sm:text-2xl font-bold mb-1 sm:mb-2">Tech Startup Office</h3>
+                <p className="text-blue-100 mb-2 sm:mb-4 text-xs sm:text-base">Modern workspace with flexible layouts and smart building systems</p>
+                <div className="grid grid-cols-3 gap-2 sm:gap-4 text-xs sm:text-sm">
                   <div>
                     <div className="text-blue-200">Size</div>
                     <div className="font-semibold">250 sqm</div>
@@ -902,8 +902,8 @@ function App() {
               { name: 'Student Dormitory', type: 'Modular', size: '500', location: 'Baguio', bedrooms: '20', imageKey: 'project-student-dorm' },
               { name: 'Retail Space', type: 'Commercial', size: '200', location: 'Makati', bedrooms: null, imageKey: 'project-retail-space' },
             ].map((project, i) => (
-              <div key={i} className="group overflow-hidden rounded-xl shadow-md active:shadow-lg transition-shadow duration-300 bg-white border border-gray-200 min-w-[260px] snap-center lg:min-w-0">
-                <div className="relative h-56 bg-gradient-to-br from-blue-800 via-teal-600 to-blue-900 overflow-hidden">
+              <div key={i} className="group overflow-hidden rounded-xl shadow-md active:shadow-lg transition-shadow duration-300 bg-white border border-gray-200 mobile-card snap-center lg:min-w-0">
+                <div className="relative h-44 sm:h-56 bg-gradient-to-br from-blue-800 via-teal-600 to-blue-900 overflow-hidden">
                   {hasStoredImage(project.imageKey) ? (
                     <img
                       src={getStoredImageUrl(project.imageKey, '')}
@@ -960,7 +960,7 @@ function App() {
             ))}
           </HorizontalCardScroller>
 
-          <div className="mt-12 bg-gradient-to-r from-blue-900 to-teal-600 rounded-2xl p-8 text-white text-center">
+          <div className="mt-8 sm:mt-12 bg-gradient-to-r from-blue-900 to-teal-600 rounded-2xl p-6 sm:p-8 text-white text-center">
             <h3 className="text-2xl font-bold mb-3">Want to See More?</h3>
             <p className="text-blue-100 mb-6 max-w-2xl mx-auto">Schedule a virtual tour or visit our showroom to explore our full portfolio of completed projects and current designs.</p>
             <button
@@ -974,7 +974,7 @@ function App() {
         </div>
       </section>
 
-      <section id="testimonials" className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-white">
+      <section id="testimonials" className="py-12 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8 sm:mb-12">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-blue-900 mb-4">What Our Customers Say</h2>
@@ -1002,7 +1002,7 @@ function App() {
                 rating: 5
               }
             ].map((testimonial, i) => (
-              <div key={i} className="bg-gradient-to-br from-gray-50 to-blue-50 p-6 sm:p-8 rounded-xl shadow-sm hover:shadow-xl transition-all border border-gray-100 min-w-[300px] snap-center lg:min-w-0">
+              <div key={i} className="bg-gradient-to-br from-gray-50 to-blue-50 p-5 sm:p-8 rounded-xl shadow-sm hover:shadow-xl transition-all border border-gray-100 mobile-card snap-center lg:min-w-0">
                 <div className="flex gap-1 mb-4">
                   {[...Array(testimonial.rating)].map((_, j) => (
                     <Star key={j} className="text-yellow-400 fill-yellow-400" size={20} />
@@ -1024,14 +1024,14 @@ function App() {
         </div>
       </section>
 
-      <section id="contact" className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-900 via-blue-800 to-teal-700">
+      <section id="contact" className="py-12 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-900 via-blue-800 to-teal-700">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">Get Your Free Consultation</h2>
             <p className="text-lg sm:text-xl text-blue-100 max-w-2xl mx-auto">Let's discuss your dream home. Fill out the form below and we'll be in touch within 24 hours.</p>
           </div>
 
-          <div className="bg-white p-6 sm:p-8 md:p-12 rounded-2xl shadow-2xl">
+          <div className="bg-white p-5 sm:p-8 md:p-12 rounded-2xl shadow-2xl">
             {submitted && (
               <div className="mb-6 p-4 bg-green-100 border border-green-300 rounded-lg text-green-800 flex items-center gap-3">
                 <div className="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
@@ -1091,7 +1091,7 @@ function App() {
         </div>
       </section>
 
-      <section id="faq" className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-gray-50">
+      <section id="faq" className="py-12 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-blue-900 mb-4">Frequently Asked Questions</h2>
@@ -1127,7 +1127,7 @@ function App() {
         </div>
       </section>
 
-      <footer className="bg-blue-900 text-white py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
+      <footer className="bg-blue-900 text-white py-10 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
             <div className="sm:col-span-2 lg:col-span-1">

@@ -37,7 +37,7 @@ export default function LoadingScreen({ isExiting }: { isExiting?: boolean }) {
       role="status"
     >
       {/* Background glow — simplified, GPU-composited */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div
           className="absolute -top-32 -left-32 w-[500px] h-[500px] bg-teal-400 rounded-full opacity-15"
           style={{ filter: 'blur(120px)', willChange: 'transform' }}

@@ -21,32 +21,53 @@ export default function LogoDisplay({ onComplete }: { onComplete: () => void }) 
 
   return (
     <div
-      className={`fixed inset-0 bg-white z-[9998] flex items-center justify-center overflow-hidden gpu-accelerated ${phase === 'exit' ? 'opacity-0' : 'opacity-100'
+      className={`fixed inset-0 bg-gradient-to-br from-blue-950 via-blue-900 to-teal-800 z-[9998] flex items-center justify-center overflow-hidden gpu-accelerated ${phase === 'exit' ? 'opacity-0' : 'opacity-100'
         }`}
       style={{ transition: 'opacity 1200ms cubic-bezier(0.4, 0, 0.2, 1)' }}
     >
-      {/* Optional: Very subtle background pattern or gradient could go here if "plain white" is too flat, 
-          but keeping it pure white as requested. */}
+      {/* Background glow */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div
+          className="absolute -top-32 -left-32 w-[500px] h-[500px] bg-teal-400 rounded-full opacity-15"
+          style={{ filter: 'blur(120px)' }}
+        />
+        <div
+          className="absolute -bottom-32 -right-32 w-[600px] h-[600px] bg-blue-50 rounded-full opacity-10"
+          style={{ filter: 'blur(120px)' }}
+        />
+      </div>
 
       {/* Logo */}
       <div className="relative z-10 flex flex-col items-center justify-center px-6">
         <div className="logo-container">
           <div className="relative flex items-center justify-center">
+            {/* Soft white glow behind logo for contrast against dark bg */}
+            <div
+              className="absolute rounded-full"
+              style={{
+                width: '110%',
+                height: '110%',
+                background: 'radial-gradient(circle, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.7) 40%, rgba(255,255,255,0.15) 65%, transparent 80%)',
+                filter: 'blur(8px)',
+              }}
+            />
             <img
               src={getStoredImageUrl('logo', '/logo.jpg')}
               alt="Quick Home Prefab"
-              className="h-48 sm:h-64 md:h-72 relative z-10"
+              // Keep mobile optimization: constrained height and max-width
+              className="h-32 sm:h-48 md:h-64 w-auto max-w-[70vw] object-contain relative z-10 rounded-2xl"
               style={{
                 animation: 'logoScale 800ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                // No filters needed on white background
+                transform: 'translateZ(0)',
+                backfaceVisibility: 'hidden',
               }}
             />
           </div>
         </div>
 
-        {/* Loading indicator */}
+        {/* Subtle loading indicator */}
         <div
-          className="mt-8 h-0.5 w-20 bg-gradient-to-r from-teal-500 to-cyan-400 rounded-full"
+          className="mt-8 h-0.5 w-20 bg-gradient-to-r from-teal-400 to-cyan-300 rounded-full"
           style={{
             animation: 'pulse 2s ease-in-out infinite',
           }}
@@ -58,12 +79,14 @@ export default function LogoDisplay({ onComplete }: { onComplete: () => void }) 
           0% {
             transform: scale(0.6);
             opacity: 0;
-            filter: blur(10px);
+            // Start with brightness boost to pop against dark
+            filter: blur(10px) brightness(1) contrast(1);
           }
           100% {
             transform: scale(1);
             opacity: 1;
-            filter: blur(0);
+            // End with brightness boost
+            filter: blur(0) brightness(1.15) contrast(1.1);
           }
         }
         @keyframes pulse {

@@ -15,16 +15,36 @@ html {
      with programmatic scrollTo. */
 }
 
+/* ── Dynamic Viewport Height Fix ── */
+/* Ensure full viewport coverage on all mobile browsers (iOS Safari, Chrome, etc.) */
+:root {
+  --vh-full: 100vh;
+  --vh-full: 100dvh;
+  /* dynamic viewport height — shrinks/grows with browser chrome */
+  --vh-small: 100vh;
+  --vh-small: 100svh;
+  /* small viewport height — always shortest */
+}
+
 body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 100%;
+  max-width: 100vw;
   min-height: 100%;
+  min-height: 100dvh;
   min-height: -webkit-fill-available;
   position: relative;
   /* Prevent overscroll bounce on iOS causing white flashes */
   overscroll-behavior-y: none;
+}
+
+/* ── Global box-sizing ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 /* ── Tap Highlight Reset ── */
@@ -42,7 +62,10 @@ section {
 
 /* ── Prevent 16px zoom on iOS input focus ── */
 @media screen and (max-width: 768px) {
-  input, textarea, select {
+
+  input,
+  textarea,
+  select {
     font-size: 16px !important;
   }
 }
@@ -70,7 +93,7 @@ section {
   display: grid;
   grid-template-rows: 0fr;
   transition: grid-template-rows 350ms cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 250ms ease;
+    opacity 250ms ease;
   opacity: 0;
 }
 
@@ -88,6 +111,7 @@ section {
   .pb-safe {
     padding-bottom: env(safe-area-inset-bottom);
   }
+
   .mb-safe {
     margin-bottom: env(safe-area-inset-bottom);
   }
@@ -98,8 +122,55 @@ section {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* ── Hero Section Mobile Fix ── */
+/* Use dynamic viewport height with fallback for consistent fullscreen hero */
+.hero-fullscreen {
+  height: 100vh;
+  /* fallback */
+  height: 100svh;
+  /* small viewport = always shortest, no jump when address bar hides */
+  min-height: 500px;
+  max-height: 100dvh;
+}
+
+/* ── Fluid Typography ── */
+/* Ensure text scales smoothly between 320px and 1200px viewport widths */
+.hero-headline {
+  font-size: clamp(1.75rem, 5vw + 0.5rem, 3.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.hero-subtext {
+  font-size: clamp(0.8rem, 1.5vw + 0.3rem, 1.125rem);
+}
+
+/* ── Mobile Section Spacing ── */
+@media screen and (max-width: 480px) {
+  .section-padding {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+/* ── Mobile Image Containers ── */
+/* Prevent images from breaking layout */
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Override for explicit cover images */
+.img-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* ── Touch Target Enhancement ── */
@@ -107,10 +178,12 @@ section {
   .touch-manipulation {
     touch-action: manipulation;
   }
+
   .touch-target {
     min-height: 44px;
     min-width: 44px;
   }
+
   .pb-safe {
     padding-bottom: env(safe-area-inset-bottom);
   }
@@ -118,11 +191,15 @@ section {
 
 /* ── Reduced Motion Preference ── */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+
   html {
     scroll-behavior: auto !important;
   }
@@ -140,25 +217,29 @@ section {
 .press-scale {
   transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 .press-scale:active {
   transform: scale(0.97);
 }
 
 /* ── Skeleton shimmer for lazy loading images ── */
 .img-skeleton {
-  background: linear-gradient(
-    90deg,
-    #f0f0f0 25%,
-    #e0e0e0 50%,
-    #f0f0f0 75%
-  );
+  background: linear-gradient(90deg,
+      #f0f0f0 25%,
+      #e0e0e0 50%,
+      #f0f0f0 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }
 
 @keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 /* ── Section Reveal Animation (via IntersectionObserver) ── */
@@ -166,7 +247,7 @@ section {
   opacity: 0;
   transform: translateY(24px);
   transition: opacity 600ms cubic-bezier(0.4, 0, 0.2, 1),
-              transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+    transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .reveal.revealed {
@@ -175,7 +256,79 @@ section {
 }
 
 /* Stagger delays for child elements */
-.reveal-delay-1 { transition-delay: 100ms; }
-.reveal-delay-2 { transition-delay: 200ms; }
-.reveal-delay-3 { transition-delay: 300ms; }
-.reveal-delay-4 { transition-delay: 400ms; }
+.reveal-delay-1 {
+  transition-delay: 100ms;
+}
+
+.reveal-delay-2 {
+  transition-delay: 200ms;
+}
+
+.reveal-delay-3 {
+  transition-delay: 300ms;
+}
+
+.reveal-delay-4 {
+  transition-delay: 400ms;
+}
+
+/* ── Hero Fade-in-up Animation ── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* ── Mobile-optimized card widths ── */
+/* Ensure cards in horizontal scrollers look good on all phones */
+@media screen and (max-width: 359px) {
+
+  /* Very small phones (iPhone SE, Galaxy A01, etc.) */
+  .mobile-card {
+    min-width: 220px !important;
+    max-width: 85vw;
+  }
+}
+
+@media screen and (min-width: 360px) and (max-width: 479px) {
+
+  /* Standard phones */
+  .mobile-card {
+    min-width: 260px !important;
+    max-width: 85vw;
+  }
+}
+
+@media screen and (min-width: 480px) and (max-width: 767px) {
+
+  /* Large phones / small tablets */
+  .mobile-card {
+    min-width: 300px !important;
+    max-width: 80vw;
+  }
+}
+
+/* ── Bottom Nav Spacing ── */
+/* Reserve space at the bottom for the fixed mobile nav */
+@media screen and (max-width: 1023px) {
+  .main-content {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* ── Prevent horizontal overflow on mobile ── */
+#root {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
