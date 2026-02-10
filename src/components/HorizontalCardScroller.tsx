@@ -1,4 +1,4 @@
-import { ReactNode, useRef, useState, useEffect } from 'react';
+import { ReactNode, useRef, useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface HorizontalCardScrollerProps {
@@ -10,32 +10,38 @@ export default function HorizontalCardScroller({ children, showArrows = true }: 
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    const mql = window.matchMedia('(min-width: 1024px)');
+    setIsDesktop(mql.matches);
+    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mql.addEventListener('change', handler);
+    return () => mql.removeEventListener('change', handler);
   }, []);
 
-  const checkScroll = () => {
+  const checkScroll = useCallback(() => {
     if (scrollRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-      setCanScrollLeft(scrollLeft > 0);
-      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+      setCanScrollLeft(scrollLeft > 4);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 4);
     }
-  };
+  }, []);
 
   useEffect(() => {
     checkScroll();
-    window.addEventListener('resize', checkScroll);
-    return () => window.removeEventListener('resize', checkScroll);
-  }, [children]);
+    const container = scrollRef.current;
+    if (!container) return;
+
+    // Use ResizeObserver instead of window resize for better perf
+    const observer = new ResizeObserver(checkScroll);
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [children, checkScroll]);
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
-      const scrollAmount = scrollRef.current.clientWidth * 0.8;
+      const scrollAmount = scrollRef.current.clientWidth * 0.75;
       scrollRef.current.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth'
@@ -45,34 +51,27 @@ export default function HorizontalCardScroller({ children, showArrows = true }: 
 
   return (
     <div className="relative">
-      {isMobile && (
-        <div className="text-center mb-4">
-          <div className="inline-flex items-center gap-2 text-sm text-gray-500 bg-gray-100 px-4 py-2 rounded-full">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
-            </svg>
-            Swipe to explore
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </div>
-        </div>
-      )}
-
+      {/* Horizontal scroll container for mobile, grid for desktop */}
       <div
         ref={scrollRef}
         onScroll={checkScroll}
-        className="flex overflow-x-auto gap-4 md:gap-6 pb-4 snap-x snap-mandatory scrollbar-hide lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:overflow-visible"
+        className={`
+          flex gap-4 md:gap-6 pb-4 scrollbar-hide
+          ${isDesktop
+            ? 'lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:overflow-visible'
+            : 'overflow-x-auto snap-x snap-mandatory scroll-smooth-touch'
+          }
+        `}
         style={{
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
-          WebkitOverflowScrolling: 'touch'
+          /* Pad first/last cards so they can center on mobile */
+          ...(isDesktop ? {} : { paddingLeft: '4px', paddingRight: '4px' })
         }}
       >
         {children}
       </div>
 
-      {showArrows && !isMobile && (
+      {/* Desktop scroll arrows */}
+      {showArrows && isDesktop && (
         <>
           {canScrollLeft && (
             <button
@@ -94,12 +93,6 @@ export default function HorizontalCardScroller({ children, showArrows = true }: 
           )}
         </>
       )}
-
-      <style>{`
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
     </div>
   );
 }

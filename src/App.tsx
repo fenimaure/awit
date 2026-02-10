@@ -1,5 +1,5 @@
-import { Home, Zap, Shield, DollarSign, Clock, Award, ChevronRight, Hammer, Lightbulb, Leaf, Star, ChevronDown, ChevronUp, Send, Menu, X, Phone, Mail, MapPin, CheckCircle, Trophy, Briefcase } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { Home, Zap, Shield, DollarSign, Clock, Award, ChevronRight, Hammer, Lightbulb, Leaf, Star, ChevronDown, Send, Menu, X, Phone, Mail, MapPin, CheckCircle, Trophy, Briefcase } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
 import Gallery3D from './components/Gallery3D';
 import LoadingScreen from './components/LoadingScreen';
 import LogoDisplay from './components/LogoDisplay';
@@ -11,23 +11,25 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="border border-gray-200 rounded-lg overflow-hidden">
+    <div className="border border-gray-200 rounded-xl overflow-hidden transition-shadow duration-300 hover:shadow-sm">
       <button
         onClick={() => setOpen(!open)}
-        className="w-full px-6 py-4 flex justify-between items-center hover:bg-gray-50 transition-colors text-left"
+        className="w-full px-5 py-4 flex justify-between items-center active:bg-gray-50 transition-colors text-left touch-manipulation touch-target"
+        aria-expanded={open}
       >
-        <span className="font-semibold text-blue-900">{question}</span>
-        {open ? (
-          <ChevronUp className="text-teal-600 flex-shrink-0 ml-4" size={20} />
-        ) : (
-          <ChevronDown className="text-gray-400 flex-shrink-0 ml-4" size={20} />
-        )}
+        <span className="font-semibold text-blue-900 text-sm sm:text-base pr-4">{question}</span>
+        <ChevronDown
+          className={`text-teal-600 flex-shrink-0 transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
+          size={20}
+        />
       </button>
-      {open && (
-        <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-          <p className="text-gray-600 leading-relaxed">{answer}</p>
+      <div className={`accordion-content ${open ? 'accordion-open' : ''}`}>
+        <div className="accordion-inner">
+          <div className="px-5 py-4 bg-gray-50/80 border-t border-gray-100">
+            <p className="text-gray-600 leading-relaxed text-sm sm:text-base">{answer}</p>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
@@ -46,27 +48,43 @@ function App() {
   const heroVideoUrl = '/hero.mp4';
   const heroImageUrl = getStoredImageUrl('hero-bg-image', '');
 
+  // Throttled scroll handler — only update scrolled state
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-
-      const sections = ['home', 'about', 'features', 'prefab-types', 'benefits', 'trust', 'services', 'process', 'projects', 'testimonials', 'contact', 'faq'];
-      const current = sections.find(section => {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          return rect.top <= 100 && rect.bottom >= 100;
-        }
-        return false;
-      });
-
-      if (current) {
-        setActiveSection(current);
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 20);
+          ticking = false;
+        });
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // IntersectionObserver for active section tracking (replaces expensive getBoundingClientRect)
+  useEffect(() => {
+    const sections = ['home', 'about', 'features', 'prefab-types', 'benefits', 'trust', 'services', 'process', 'projects', 'testimonials', 'contact', 'faq'];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: '-20% 0px -60% 0px', threshold: 0 }
+    );
+
+    sections.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -93,12 +111,12 @@ function App() {
     setTimeout(() => setSubmitted(false), 5000);
   };
 
-  const scrollToSection = (sectionId: string) => {
+  const scrollToSection = useCallback((sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
       const offset = 80;
       const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
+      const offsetPosition = elementPosition + window.scrollY - offset;
 
       window.scrollTo({
         top: offsetPosition,
@@ -106,7 +124,7 @@ function App() {
       });
     }
     setMobileMenuOpen(false);
-  };
+  }, []);
 
   const navItems = [
     { id: 'home', label: 'Home' },
@@ -165,7 +183,7 @@ function App() {
               </a>
               <button
                 onClick={() => scrollToSection('contact')}
-                className="bg-gradient-to-r from-teal-600 to-teal-700 text-white px-6 py-2.5 rounded-lg hover:from-teal-700 hover:to-teal-800 transition-all font-medium shadow-md hover:shadow-lg transform hover:scale-105"
+                className="bg-gradient-to-r from-teal-600 to-teal-700 text-white px-6 py-2.5 rounded-lg active:scale-[0.97] transition-transform duration-150 font-medium shadow-md touch-manipulation"
               >
                 Get Started
               </button>
@@ -234,7 +252,7 @@ function App() {
         </div>
       </div>
 
-      <section id="home" className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden bg-slate-900">
+      <section id="home" className="relative h-[100svh] min-h-[500px] flex items-end justify-center overflow-hidden bg-slate-900 pb-20 sm:pb-24">
         {/* Background Media */}
         <div className="absolute inset-0 z-0">
           {heroVideoUrl && !videoError ? (
@@ -243,9 +261,11 @@ function App() {
               loop
               muted
               playsInline
+              poster="/hero.png"
               className="w-full h-full object-cover"
               key={heroVideoUrl}
               onError={() => setVideoError(true)}
+              preload="metadata"
             >
               <source src={heroVideoUrl} type="video/mp4" />
             </video>
@@ -253,33 +273,48 @@ function App() {
             <img
               src={heroImageUrl}
               alt="Hero Background"
-              className="w-full h-full object-cover transform scale-105 animate-slow-zoom"
+              className="w-full h-full object-cover"
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-blue-950 via-blue-900 to-teal-700 relative overflow-hidden">
-              <div className="absolute -top-40 -left-40 w-96 h-96 bg-teal-400 rounded-full blur-3xl opacity-20 animate-pulse"></div>
-              <div className="absolute -bottom-20 -right-40 w-full h-96 bg-blue-600 rounded-full blur-3xl opacity-15 animate-pulse" style={{ animationDelay: '1s' }}></div>
+              <div className="absolute -top-40 -left-40 w-96 h-96 bg-teal-400 rounded-full opacity-20" style={{ filter: 'blur(80px)' }} />
+              <div className="absolute -bottom-20 -right-40 w-full h-96 bg-blue-600 rounded-full opacity-15" style={{ filter: 'blur(80px)' }} />
             </div>
           )}
-          {/* Overlay */}
-          <div className={`absolute inset-0 ${(heroVideoUrl && !videoError) || heroImageUrl ? 'bg-black/40' : ''}`}></div>
+
+          {/* Cinematic Gradient Overlay - clear top, dark bottom for text legibility */}
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent" />
         </div>
 
-        {/* Content */}
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20">
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center px-2 animate-fade-in-up">
+        {/* Minimal Bottom-Anchored Content */}
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 text-center sm:text-left mb-safe">
+          <div className="max-w-xl mx-auto sm:mx-0 animate-fade-in-up">
+            {/* Pill Badge */}
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 mb-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-teal-200 text-xs font-medium tracking-wide">
+              <Star size={12} className="fill-teal-200" />
+              <span>PREMIUM PREFAB HOMES</span>
+            </div>
+
+            {/* Punchy Headline */}
+            <h1 className="text-4xl sm:text-6xl font-bold text-white mb-4 tracking-tight leading-[1.1]">
+              Building Smarter, <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-200 to-cyan-200">
+                Living Better.
+              </span>
+            </h1>
+
+            {/* Micro-copy features */}
+            <p className="text-teal-100/90 text-sm sm:text-lg mb-8 font-medium tracking-wide mx-auto sm:mx-0">
+              Prefab Homes • Fast Delivery • Durable • Affordable
+            </p>
+
+            {/* Single Primary Action */}
             <button
               onClick={() => scrollToSection('projects')}
-              className="group bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 active:from-teal-700 active:to-teal-800 text-white px-8 sm:px-12 py-4 sm:py-6 rounded-xl hover:shadow-2xl transition-all transform hover:scale-105 font-bold text-base sm:text-lg shadow-xl flex items-center justify-center gap-2 active:scale-95 min-h-[56px] touch-manipulation"
+              className="w-full sm:w-auto bg-white text-slate-900 px-8 py-4 rounded-xl font-bold text-lg shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)] active:scale-[0.98] transition-all duration-200 touch-manipulation touch-target flex items-center justify-center gap-2 group"
             >
-              Explore Homes
-              <ChevronRight className="group-hover:translate-x-1 transition-transform" size={22} />
-            </button>
-            <button
-              onClick={() => scrollToSection('contact')}
-              className="group bg-white/10 backdrop-blur-md text-white px-8 sm:px-12 py-4 sm:py-6 rounded-xl hover:bg-white/20 active:bg-white/25 transition-all font-bold text-base sm:text-lg border-2 border-white/30 hover:border-white/50 shadow-xl active:scale-95 transform hover:scale-105 min-h-[56px] touch-manipulation"
-            >
-              Get Started
+              Explore Our Homes
+              <ChevronRight className="group-hover:translate-x-1 transition-transform" size={20} />
             </button>
           </div>
         </div>
@@ -359,12 +394,12 @@ function App() {
               { icon: Hammer, title: 'Customizable Designs', desc: 'Personalize every detail. From layout to finishes, create the exact home you\'ve always imagined.' },
               { icon: MapPin, title: 'Local Expertise', desc: 'Deep-rooted in Philippine communities. We understand regional needs, climate, and preferences perfectly.' },
             ].map((feature, i) => (
-              <div key={i} className="group bg-white p-6 sm:p-8 rounded-2xl shadow-md hover:shadow-2xl transition-all transform hover:-translate-y-3 duration-500 border border-gray-100 hover:border-teal-200 min-w-[280px] snap-center lg:min-w-0">
-                <div className="bg-gradient-to-br from-teal-100 to-teal-50 w-16 h-16 rounded-xl flex items-center justify-center mb-5 group-hover:from-teal-500 group-hover:to-teal-600 transition-all duration-500 shadow-sm">
-                  <feature.icon className="text-teal-600 group-hover:text-white transition-colors duration-500" size={32} />
+              <div key={i} className="group bg-white p-6 sm:p-8 rounded-2xl shadow-md active:shadow-lg transition-shadow duration-300 border border-gray-100 min-w-[260px] snap-center lg:min-w-0">
+                <div className="bg-gradient-to-br from-teal-100 to-teal-50 w-14 h-14 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center mb-4 shadow-sm">
+                  <feature.icon className="text-teal-600" size={28} />
                 </div>
-                <h3 className="text-xl font-bold text-blue-900 mb-3 group-hover:text-teal-600 transition-colors">{feature.title}</h3>
-                <p className="text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors">{feature.desc}</p>
+                <h3 className="text-lg sm:text-xl font-bold text-blue-900 mb-2">{feature.title}</h3>
+                <p className="text-gray-600 leading-relaxed text-sm sm:text-base">{feature.desc}</p>
               </div>
             ))}
           </HorizontalCardScroller>
@@ -670,10 +705,10 @@ function App() {
               { icon: Shield, title: 'Extended Warranty', desc: '10-year comprehensive warranty covering structural and mechanical components.' },
               { icon: DollarSign, title: 'Financing Options', desc: 'Flexible payment plans and partnerships with leading financial institutions.' },
             ].map((service, i) => (
-              <div key={i} className="bg-white p-6 sm:p-8 rounded-xl border border-teal-100 hover:border-teal-300 transition-all shadow-sm hover:shadow-xl transform hover:-translate-y-1 duration-300 min-w-[280px] snap-center lg:min-w-0">
-                <service.icon className="text-teal-600 mb-4" size={32} />
-                <h3 className="text-xl font-bold text-blue-900 mb-2">{service.title}</h3>
-                <p className="text-gray-600">{service.desc}</p>
+              <div key={i} className="bg-white p-6 sm:p-8 rounded-xl border border-teal-100 transition-shadow duration-300 shadow-sm active:shadow-md min-w-[260px] snap-center lg:min-w-0">
+                <service.icon className="text-teal-600 mb-4" size={28} />
+                <h3 className="text-lg sm:text-xl font-bold text-blue-900 mb-2">{service.title}</h3>
+                <p className="text-gray-600 text-sm sm:text-base">{service.desc}</p>
               </div>
             ))}
           </HorizontalCardScroller>
@@ -740,7 +775,7 @@ function App() {
           <div className="mt-12 text-center">
             <button
               onClick={() => scrollToSection('contact')}
-              className="bg-gradient-to-r from-teal-600 to-blue-900 text-white px-10 py-4 rounded-lg hover:from-teal-700 hover:to-blue-950 transition-all font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 inline-flex items-center gap-2"
+              className="bg-gradient-to-r from-teal-600 to-blue-900 text-white px-8 py-4 rounded-lg active:scale-[0.97] transition-transform duration-150 font-semibold text-lg shadow-lg inline-flex items-center gap-2 touch-manipulation touch-target"
             >
               Start Your Project Today
               <ChevronRight size={20} />
@@ -867,7 +902,7 @@ function App() {
               { name: 'Student Dormitory', type: 'Modular', size: '500', location: 'Baguio', bedrooms: '20', imageKey: 'project-student-dorm' },
               { name: 'Retail Space', type: 'Commercial', size: '200', location: 'Makati', bedrooms: null, imageKey: 'project-retail-space' },
             ].map((project, i) => (
-              <div key={i} className="group overflow-hidden rounded-xl shadow-md hover:shadow-2xl transition-all transform hover:-translate-y-2 duration-300 bg-white border border-gray-200 min-w-[280px] snap-center lg:min-w-0">
+              <div key={i} className="group overflow-hidden rounded-xl shadow-md active:shadow-lg transition-shadow duration-300 bg-white border border-gray-200 min-w-[260px] snap-center lg:min-w-0">
                 <div className="relative h-56 bg-gradient-to-br from-blue-800 via-teal-600 to-blue-900 overflow-hidden">
                   {hasStoredImage(project.imageKey) ? (
                     <img
@@ -1046,7 +1081,7 @@ function App() {
 
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-teal-600 to-blue-900 text-white px-8 py-4 rounded-lg hover:from-teal-700 hover:to-blue-950 transition-all font-semibold text-lg flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105"
+                className="w-full bg-gradient-to-r from-teal-600 to-blue-900 text-white px-8 py-4 rounded-lg active:scale-[0.97] transition-transform duration-150 font-semibold text-lg flex items-center justify-center gap-2 shadow-lg touch-manipulation touch-target"
               >
                 <Send size={20} />
                 Send Message
